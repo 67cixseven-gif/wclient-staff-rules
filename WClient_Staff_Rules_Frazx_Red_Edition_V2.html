@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#080202" />
+    <title>WClient Staff Rules</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --red: #f22b35;
+        --red2: #8c1017;
+        --deep: #07090d;
+        --panel: #10131a;
+        --panel2: #151923;
+        --white: #fff;
+        --gray: #b8bec8;
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        background: #050609;
+        color: var(--white);
+      }
+
+      body {
+        font-family: 'Press Start 2P', 'Courier New', monospace;
+        background: radial-gradient(circle at 50% 20%, #26070a 0, #0a0a0d 34%, #040509 100%);
+        overflow-x: hidden;
+      }
+
+      button { font: inherit; }
+
+      #loading {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 45%, rgba(242,43,53,.16), transparent 25%), linear-gradient(180deg,#02040a,#080b10 48%,#040509);
+        isolation: isolate;
+      }
+
+      #loading::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+      }
+
+      #loading::after {
+        content: "";
+        position: absolute;
+        inset: -20%;
+        background: radial-gradient(circle, rgba(242,43,53,.10), transparent 55%);
+        animation: pulse 2.2s ease-in-out infinite;
+      }
+
+      #loading.hide {
+        pointer-events: none;
+        animation: loadingOut .65s ease forwards;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(0.96); opacity: 0.7; }
+        50% { transform: scale(1.08); opacity: 1; }
+      }
+
+      @keyframes loadingOut {
+        to { opacity: 0; visibility: hidden; }
+      }
+
+      .spinner {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        font-size: 12px;
+        letter-spacing: 2px;
+        color: var(--white);
+        text-shadow: 0 0 18px rgba(242,43,53,.8);
+      }
+
+      .spinner .brand {
+        display: inline-block;
+        margin-bottom: 18px;
+        font-size: 18px;
+        color: var(--red);
+      }
+
+      .spinner .bar {
+        width: min(58vw, 360px);
+        height: 16px;
+        border: 2px solid rgba(255,255,255,.12);
+        background: rgba(255,255,255,.04);
+        margin: 18px auto 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .spinner .bar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: 42%;
+        background: linear-gradient(90deg, rgba(242,43,53,0), rgba(242,43,53,.9), rgba(242,43,53,0));
+        animation: scan 1.6s ease-in-out infinite;
+      }
+
+      @keyframes scan {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(220%); }
+      }
+
+      #rain {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .rune {
+        position: absolute;
+        top: -10vh;
+        color: rgba(255,255,255,.16);
+        font-family: monospace;
+        font-size: 18px;
+        font-weight: 900;
+        text-shadow: 0 0 9px rgba(242,43,53,.6);
+        animation: drop var(--dur) linear infinite;
+        animation-delay: var(--delay);
+        will-change: transform, opacity;
+      }
+
+      @keyframes drop {
+        to {
+          transform: translate3d(var(--x), 120vh, 0) rotate(var(--rot));
+          opacity: 0;
+        }
+      }
+
+      .shell {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 48px 20px 80px;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 360px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-wrap {
+        position: relative;
+        width: min(64vw, 430px);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        filter: drop-shadow(0 0 10px rgba(242,43,53,.2)) drop-shadow(0 0 35px rgba(242,43,53,.22));
+      }
+
+      .logo-core {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.08), rgba(242,43,53,.18) 30%, rgba(0,0,0,.2) 65%, rgba(0,0,0,.6) 100%);
+        border: 2px solid rgba(242,43,53,.45);
+        box-shadow: inset 0 0 28px rgba(242,43,53,.15), 0 0 46px rgba(242,43,53,.18);
+        display: grid;
+        place-items: center;
+      }
+
+      .logo-core::before {
+        content: "W";
+        font-size: clamp(76px, 12vw, 180px);
+        line-height: 1;
+        color: rgba(255,255,255,.92);
+        text-shadow: 0 0 18px rgba(242,43,53,.9), 0 0 36px rgba(242,43,53,.5);
+      }
+
+      .hero h1 {
+        margin: 24px 0 12px;
+        font-size: clamp(14px, 2vw, 32px);
+        text-align: center;
+        letter-spacing: 2px;
+        color: var(--white);
+        text-shadow: 0 0 18px rgba(242,43,53,.8);
+      }
+
+      .subtitle {
+        font-size: 11px;
+        opacity: 0.8;
+        textAlign: center;
+        letter-spacing: 1px;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+        margin: 12px auto 30px;
+      }
+
+      .chip {
+        border: 2px solid rgba(242,43,53,.8);
+        background: rgba(242,43,53,.08);
+        color: var(--white);
+        padding: 12px 16px;
+        font-size: 10px;
+        letter-spacing: 2px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: transform .2s ease, box-shadow .2s ease;
+      }
+
+      .chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 16px rgba(242,43,53,.25);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 20px;
+      }
+
+      .card {
+        grid-column: span 4;
+        background: linear-gradient(180deg, rgba(16,19,26,.95), rgba(21,25,35,.95));
+        border: 2px solid rgba(255,255,255,.08);
+        box-shadow: 0 0 0 1px rgba(242,43,53,.1), inset 0 0 14px rgba(242,43,53,.04);
+        padding: 22px 18px;
+      }
+
+      .card h2 {
+        margin: 0 0 16px;
+        font-size: 13px;
+        color: var(--red);
+        letter-spacing: 1px;
+      }
+
+      .card ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--gray);
+        line-height: 1.8;
+        font-size: 11px;
+      }
+
+      .card li + li { margin-top: 10px; }
+
+      .full {
+        grid-column: 1 / -1;
+        margin-top: 18px;
+      }
+
+      .panel {
+        background: rgba(16,19,26,.88);
+        border: 2px solid rgba(242,43,53,.4);
+        padding: 20px 22px;
+      }
+
+      .panel h3 {
+        margin: 0 0 16px;
+        font-size: 12px;
+        color: var(--red);
+      }
+
+      .status {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 10px 14px;
+        border: 2px solid rgba(255,255,255,.1);
+        background: rgba(255,255,255,.02);
+        color: var(--white);
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 760px) {
+        .card { grid-column: 1 / -1; }
+        .shell { padding-top: 32px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading" aria-live="polite">
+      <div id="rain" aria-hidden="true"></div>
+      <div class="spinner">
+        <div class="brand">WCLIENT</div>
+        <div>INITIALIZING STAFF MATRIX</div>
+        <div class="bar"></div>
+      </div>
+    </div>
+
+    <main class="shell">
+      <section class="hero">
+        <div class="logo-wrap" aria-hidden="true">
+          <div class="logo-core"></div>
+        </div>
+        <h1>WClient Staff Rules</h1>
+        <div class="subtitle">Frazx Red Edition V2</div>
+      </section>
+
+      <div class="toolbar" aria-label="Page shortcuts">
+        <button class="chip">Rules</button>
+        <button class="chip">Integrity</button>
+        <button class="chip">Moderation</button>
+        <button class="chip">Compliance</button>
+        <button class="chip">Security</button>
+      </div>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Core Standards</h2>
+          <ul>
+            <li>Maintain professionalism at all times.</li>
+            <li>Be respectful and objective in communications.</li>
+            <li>Prioritize safety, fairness, and clarity.</li>
+            <li>Use authority with accountability and restraint.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>Behavior</h2>
+          <ul>
+            <li>Do not harass, bait, or target users.</li>
+            <li>Never abuse privileges or exploit loopholes.</li>
+            <li>Encourage cooperation and calm conflict resolution.</li>
+            <li>Escalate serious issues to the proper authority.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>Team Conduct</h2>
+          <ul>
+            <li>Keep actions aligned with community values.</li>
+            <li>Share information clearly and honestly.</li>
+            <li>Document decisions when consequences apply.</li>
+            <li>Support the mission without favoritism.</li>
+          </ul>
+        </article>
+
+        <article class="full panel">
+          <h3>Operational Rules</h3>
+          <ul>
+            <li>All staff members must act in service of fairness, order, and public trust.</li>
+            <li>Use tools, moderation actions, and reports responsibly and with evidence.</li>
+            <li>Maintain accurate records and do not falsify outcomes or discussions.</li>
+            <li>Any harmful conduct, intimidation, or abuse of authority is grounds for review.</li>
+            <li>Staff must remain transparent when a conflict of interest, error, or misconduct is identified.</li>
+          </ul>
+
+          <div class="status">
+            <span class="pill">Status: Active</span>
+            <span class="pill">Access: Restricted</span>
+            <span class="pill">Priority: High</span>
+            <span class="pill">Review: Continuous</span>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      const rain = document.getElementById('rain');
+      const loading = document.getElementById('loading');
+
+      for (let i = 0; i < 26; i++) {
+        const rune = document.createElement('span');
+        rune.className = 'rune';
+        rune.textContent = ['✦', '▣', '✺', '⟐', '⟡', '▤', '✧'][i % 7];
+        rune.style.left = `${Math.random() * 100}%`;
+        rune.style.setProperty('--x', `${(Math.random() - 0.5) * 200}px`);
+        rune.style.setProperty('--dur', `${4 + Math.random() * 7}s`);
+        rune.style.setProperty('--delay', `${(-Math.random() * 12).toFixed(2)}s`);
+        rune.style.setProperty('--rot', `${(Math.random() - 0.5) * 140}deg`);
+        rune.style.opacity = (0.2 + Math.random() * 0.6).toFixed(2);
+        rain.appendChild(rune);
+      }
+
+      window.addEventListener('load', () => {
+        setTimeout(() => loading.classList.add('hide'), 1300);
+      });
+    </script>
+  </body>
+</html>
